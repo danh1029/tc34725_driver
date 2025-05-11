@@ -5,8 +5,21 @@
 - **NAME: Tran Anh Tri      studentID: 22146427**
 - **NAME: Nguyen Huynh Anh  studentID: 22146263**
 
-# OVERVIEW
-This driver provide function in user space to get info in TCS34725 driver in raspberrypi. 
+## OVERVIEW
+TCS34725 RGB color sensor.
+This driver provide function in user space to get data in kernel.  
+Using i2c driver and register a i2c device tree 
 
-Using color sensor and get info in SDA and SDL pin, not a DR/CT pin.
-Using i2c driver and 
+## INSTALL
+Register a driver will create a character device at /dev/tcs34725.
+One more thing you have to do is register I2c device name "tcs34725@29" in I2C device tree.
+
+Make sure the Makefile like that
+'''bash
+obj-m += TCS34725_Driver_ioctrl.o
+KDIR = /lib/modules/$(shell uname -r)/build
+
+all:
+	make -C $(KDIR) M=$(shell pwd) modules
+clean: 
+	make -C $(KDIR) M=$(shell pwd) clean
