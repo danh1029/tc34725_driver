@@ -14,8 +14,9 @@ Using i2c driver and register a i2c device tree
 Register a driver will create a character device at /dev/tcs34725.
 One more thing you have to do is register I2c device name "tcs34725@29" in I2C device tree.
 
-Make sure the Makefile like that
-'''bash
+Make sure the Makefile like that.
+
+```bash
 obj-m += TCS34725_Driver_ioctrl.o
 KDIR = /lib/modules/$(shell uname -r)/build
 
@@ -23,3 +24,11 @@ all:
 	make -C $(KDIR) M=$(shell pwd) modules
 clean: 
 	make -C $(KDIR) M=$(shell pwd) clean
+
+<unme -r> give a kernel name is running, and certainly it have a build file
+If it doesn't have, you should change a kernel version have a build file
+
+Build a .ko file using cmd
+```bash
+make
+	+	+	+
