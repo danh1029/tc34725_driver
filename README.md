@@ -1,9 +1,9 @@
-# TCS34725_DRIVER_RASPBERRYPI
+# TCS34725_DRIVER
 
-**NAME: Nguyen Thanh Danh studentID: 22146282**
-**NAME: Tran Xuan Hoang   studentID: 22146311**
-**NAME: Tran Anh Tri      studentID: 22146427**
-**NAME: Nguyen Huynh Anh  studentID: 22146263**
+- **NAME: Nguyen Thanh Danh studentID: 22146282**
+- **NAME: Tran Xuan Hoang   studentID: 22146311**
+- **NAME: Tran Anh Tri      studentID: 22146427**
+- **NAME: Nguyen Huynh Anh  studentID: 22146263**
 
 # OVERVIEW
 This driver provide function in user space to get info in TCS34725 driver in raspberrypi. 
