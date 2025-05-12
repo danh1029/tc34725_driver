@@ -12,7 +12,7 @@
 ## OVERVIEW
 TCS34725 RGB color sensor.
 This driver ioctrl provide function in user space to get data in kernel.  
-Using i2c driver and register a i2c device tree. 
+Using I2C driver and register a I2C device tree. 
 
 ## INSTALL
 Register a driver will create a character device at /dev/tcs34725.
@@ -139,7 +139,7 @@ TCS34725_IOCTL_SET_ATIM is set the integrate time for sensor
 integration time = (256 - atime ) *2.4, short time get data quick, long time more accurate.
 ## TEST DRIVER IN KERNEL
 1. The Makefile change a obj-m to driver file
-   ```
+```bash
 	obj-m += TCS34725_driver.o
 	
 	all:
@@ -148,12 +148,11 @@ integration time = (256 - atime ) *2.4, short time get data quick, long time mor
 	clean:
 		make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 ```
-Then do the same
+Then do the same.
 2. Build a .ko file using cmd
 ```bash
 	make
 ```
-
 3.Install a driver
 ```bash
 	sudo insmod TCS34725_Driver_ioctrl.ko
