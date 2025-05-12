@@ -1,13 +1,13 @@
 # TCS34725_DRIVER
 
-- **NAME: Nguyen Thanh Danh
-- StudentID: 22146282**
-- **NAME: Tran Xuan Hoang
-- StudentID: 22146311**
-- **NAME: Tran Anh Tri
-- StudentID: 22146427**
-- **NAME: Nguyen Huynh Anh
-- StudentID: 22146263**
+- **NAME: Nguyen Thanh Danh**
+- **StudentID: 22146282**
+- **NAME: Tran Xuan Hoang**
+- **StudentID: 22146311**
+- **NAME: Tran Anh Tri**
+- **StudentID: 22146427**
+- **NAME: Nguyen Huynh Anh**
+- **StudentID: 22146263**
 
 ## OVERVIEW
 TCS34725 RGB color sensor.
@@ -58,14 +58,14 @@ compatible to set Raspberry recognize sensor when it binding in to I2C bus
 1. Make sure the Makefile have a correct driver name you want to compile in obj-m += name.o
 
 ```bash
-obj-m += TCS34725_Driver_ioctrl.o
-KDIR = /lib/modules/$(shell uname -r)/build
-
-all:
-	make -C $(KDIR) M=$(shell pwd) modules
-clean: 
-	make -C $(KDIR) M=$(shell pwd) clean
-```
+	obj-m += TCS34725_Driver_ioctrl.o
+	KDIR = /lib/modules/$(shell uname -r)/build
+	
+	all:
+		make -C $(KDIR) M=$(shell pwd) modules
+	clean: 
+		make -C $(KDIR) M=$(shell pwd) clean
+	```
 
 <unme -r> give a kernel name is running, and certainly it have a build file
 If it doesn't have, you should change a kernel version have a build file.
@@ -79,7 +79,7 @@ If it doesn't have, you should change a kernel version have a build file.
 ```bash
 	sudo insmod TCS34725_Driver_ioctrl.ko
 ```
-In that case TCS34725_Driver_ioctrl are set in Makefile
+In that case TCS34725_Driver_ioctrl are set in Makefile.
 4. You can check a notice in kernel log file
 ```bash
 	dmesg
@@ -94,22 +94,22 @@ In that case TCS34725_Driver_ioctrl are set in Makefile
 ```
 ### FUNCTION PROVIDE
 CHARACTER DEVICE API
-1. open(), close()
+1. ```open(), close()```
    Standard open() and close() operations on /dev/tcs34725 are supported.
 
-2. read()
+2. ```read()```
    Currently not implemented. Use ioctl() to get color data.
 
-3. ioctl()
+3. ```ioctl()
    #define TCS34725_IOC_MAGIC 't'
    #define TCS34725_GET_CLEAR   _IOR(TCS34725_IOC_MAGIC, 1, int)
    #define TCS34725_GET_RED     _IOR(TCS34725_IOC_MAGIC, 2, int)
    #define TCS34725_GET_GREEN   _IOR(TCS34725_IOC_MAGIC, 3, int)
    #define TCS34725_GET_BLUE    _IOR(TCS34725_IOC_MAGIC, 4, int)
    #define TCS34725_IOCTL_SET_GAIN    _IOW(TCS34725_IOCTL_MAGIC, 5, int)
-   #define TCS34725_IOCTL_SET_ATIME   _IOW(TCS34725_IOCTL_MAGIC, 6, int)
+   #define TCS34725_IOCTL_SET_ATIME   _IOW(TCS34725_IOCTL_MAGIC, 6, int)```
 Example:
-'''c
+```c
 	int fd;
 	fd = open(DEVICE_NAME, O_RDWR);
 	if (fd < 0) {
@@ -125,4 +125,4 @@ Example:
         	printf("Read Clear Color Data: %d ", color_data);
     	}
    	close(fd);
-'''
+```
