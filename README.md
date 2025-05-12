@@ -17,7 +17,7 @@ Using i2c driver and register a i2c device tree.
 ## INSTALL
 Register a driver will create a character device at /dev/tcs34725.
 One more thing you have to do is register I2C device name "tcs34725@29" in I2C device tree.
-
+### DEVICE CLIENT
 1. To register a device in device tree, let change directory to the boot
 Change a dtb file to load a file when Raspberry starting and boot a I2C devide add a client.
 I use a Raspberry Pi 4B so the dtb file is bcm2711-rpi-4-b.dtb.
@@ -54,7 +54,7 @@ compatible to set Raspberry recognize sensor when it binding in to I2C bus
 	dtc -I dts -O dtb -o bcm2711-rpi-4-b.dtb bcm2711-rpi-4-b.dts
 	sudo reboot
 ```
-
+### INSTALL DRIVER
 1. Make sure the Makefile have a correct driver name you want to compile in obj-m += name.o
 
 ```bash
@@ -65,9 +65,9 @@ compatible to set Raspberry recognize sensor when it binding in to I2C bus
 		make -C $(KDIR) M=$(shell pwd) modules
 	clean: 
 		make -C $(KDIR) M=$(shell pwd) clean
-	```
+```
 
-<unme -r> give a kernel name is running, and certainly it have a build file
+<uname -r> give a kernel name is running, and certainly it have a build file
 If it doesn't have, you should change a kernel version have a build file.
 
 2. Build a .ko file using cmd
@@ -100,14 +100,16 @@ CHARACTER DEVICE API
 2. ```read()```
    Currently not implemented. Use ioctl() to get color data.
 
-3. ```ioctl()
+3. ```c
+   ioctl()
    #define TCS34725_IOC_MAGIC 't'
    #define TCS34725_GET_CLEAR   _IOR(TCS34725_IOC_MAGIC, 1, int)
    #define TCS34725_GET_RED     _IOR(TCS34725_IOC_MAGIC, 2, int)
    #define TCS34725_GET_GREEN   _IOR(TCS34725_IOC_MAGIC, 3, int)
    #define TCS34725_GET_BLUE    _IOR(TCS34725_IOC_MAGIC, 4, int)
    #define TCS34725_IOCTL_SET_GAIN    _IOW(TCS34725_IOCTL_MAGIC, 5, int)
-   #define TCS34725_IOCTL_SET_ATIME   _IOW(TCS34725_IOCTL_MAGIC, 6, int)```
+   #define TCS34725_IOCTL_SET_ATIME   _IOW(TCS34725_IOCTL_MAGIC, 6, int)
+   ```
 Example:
 ```c
 	int fd;
@@ -125,4 +127,52 @@ Example:
         	printf("Read Clear Color Data: %d ", color_data);
     	}
    	close(fd);
+```
+TCS34725_GET_CLEAR is get the intensity all color. 
+TCS34725_GET_RED is get the intensity of RED.
+TCS34725_GET_GREEN is get the intensity of GREEN.
+TCS34725_GET_BLUE is get the intensity of BLUE.
+Every color in range of 16 bit data.
+TCS34725_IOCTL_SET_GAIN is set the sensitivity of sensor.
+Gain is setting the sensor sensitivity:  0x00, 0x01, 0x02, 0x03 equal to 1x 4x 16x 60x.
+TCS34725_IOCTL_SET_ATIM is set the integrate time for sensor
+integration time = (256 - atime ) *2.4, short time get data quick, long time more accurate.
+## TEST DRIVER IN KERNEL
+1. The Makefile change a obj-m to driver file
+   ```
+	obj-m += TCS34725_driver.o
+	
+	all:
+		make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+	
+	clean:
+		make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+```
+Then do the same
+2. Build a .ko file using cmd
+```bash
+	make
+```
+
+3.Install a driver
+```bash
+	sudo insmod TCS34725_Driver_ioctrl.ko
+```
+In that case TCS34725_Driver_ioctrl are set in Makefile.
+4. You can check a notice in kernel log file
+```bash
+	dmesg
+```
+If running, the log file send a data get 1 time in sensor.
+If no data is sending, check the I2C recognize a sensor before.
+```bash
+	i2cdetect -y 1
+```
+5 If you want to uninstall driver run this cmd
+```bash
+	sudo rmmod TCS34725_Driver_ioctrl.ko
+```
+6. Then remove all file compile
+```bash
+	make clean
 ```
