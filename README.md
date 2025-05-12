@@ -108,14 +108,14 @@ In that case TCS34725_Driver_ioctrl are set in Makefile.
 ### FUNCTION PROVIDE
 CHARACTER DEVICE API
 1. ```open(), close()```
-2. 
+
    Standard open() and close() operations on /dev/tcs34725 are supported.
 
-3. ```read()```
-4. 
+2. ```read()```
+ 
    Currently not implemented. Use ioctl() to get color data.
 
-5. ```c
+3. ```c
    ioctl()
    #define TCS34725_IOC_MAGIC 't'
    #define TCS34725_GET_CLEAR   _IOR(TCS34725_IOC_MAGIC, 1, int)
