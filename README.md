@@ -1,9 +1,13 @@
 # TCS34725_DRIVER
 
-- **NAME: Nguyen Thanh Danh studentID: 22146282**
-- **NAME: Tran Xuan Hoang   studentID: 22146311**
-- **NAME: Tran Anh Tri      studentID: 22146427**
-- **NAME: Nguyen Huynh Anh  studentID: 22146263**
+- **NAME: Nguyen Thanh Danh
+- StudentID: 22146282**
+- **NAME: Tran Xuan Hoang
+- StudentID: 22146311**
+- **NAME: Tran Anh Tri
+- StudentID: 22146427**
+- **NAME: Nguyen Huynh Anh
+- StudentID: 22146263**
 
 ## OVERVIEW
 TCS34725 RGB color sensor.
@@ -15,7 +19,9 @@ Register a driver will create a character device at /dev/tcs34725.
 One more thing you have to do is register I2C device name "tcs34725@29" in I2C device tree.
 
 1. To register a device in device tree, let change directory to the boot
+Change a dtb file to load a file when Raspberry starting and boot a I2C devide add a client.
 I use a Raspberry Pi 4B so the dtb file is bcm2711-rpi-4-b.dtb.
+Dtb is Device tree binray, so transfer it into dts to edit.
 ```bash
 	cd /boot
 	dtc -I dtb -O dts -o bcm2711-rpi-4-b.dts bcm2711-rpi-4-b.dtb
@@ -24,7 +30,6 @@ I use a Raspberry Pi 4B so the dtb file is bcm2711-rpi-4-b.dtb.
 2. After that, edit bcm2711-rpi-4-b.dts with the sudo permission
 In that case, i use geany to find a character easy.
 The I2C we use in Raspberry is I2C1, then we find a code just like. 
-
 ```dts
 	&i2c1 {
         	compatible = "<name>";
@@ -32,7 +37,6 @@ The I2C we use in Raspberry is I2C1, then we find a code just like.
 	};
 ```
 3. Add the client using I2C, repeat if u have any driver running base on I2C in the future
-Remember to change status to okay.
 ```dts
 	&i2c1 {
         	compatible = "<name>";
@@ -42,6 +46,9 @@ Remember to change status to okay.
         		reg = <0x29>;
 	};
 ```
+Remember to change status to okay.
+reg is a address of sensor in I2C protocol.
+compatible to set Raspberry recognize sensor when it binding in to I2C bus
 4. Then save a dts file, change it back to dtb file and reboot a Raspberry
 ```bash
 	dtc -I dts -O dtb -o bcm2711-rpi-4-b.dtb bcm2711-rpi-4-b.dts
@@ -85,3 +92,37 @@ In that case TCS34725_Driver_ioctrl are set in Makefile
 ```bash
 	make clean
 ```
+### FUNCTION PROVIDE
+CHARACTER DEVICE API
+1. open(), close()
+   Standard open() and close() operations on /dev/tcs34725 are supported.
+
+2. read()
+   Currently not implemented. Use ioctl() to get color data.
+
+3. ioctl()
+   #define TCS34725_IOC_MAGIC 't'
+   #define TCS34725_GET_CLEAR   _IOR(TCS34725_IOC_MAGIC, 1, int)
+   #define TCS34725_GET_RED     _IOR(TCS34725_IOC_MAGIC, 2, int)
+   #define TCS34725_GET_GREEN   _IOR(TCS34725_IOC_MAGIC, 3, int)
+   #define TCS34725_GET_BLUE    _IOR(TCS34725_IOC_MAGIC, 4, int)
+   #define TCS34725_IOCTL_SET_GAIN    _IOW(TCS34725_IOCTL_MAGIC, 5, int)
+   #define TCS34725_IOCTL_SET_ATIME   _IOW(TCS34725_IOCTL_MAGIC, 6, int)
+Example:
+'''c
+	int fd;
+	fd = open(DEVICE_NAME, O_RDWR);
+	if (fd < 0) {
+        	perror("Failed to open the device");
+        	return errno;
+	}
+       	if (ioctl(fd, TCS34725_IOCTL_READ_C, &color_data) < 0) {
+        	perror("Failed to read Clear Color Data");    
+        	close(fd);
+        	return errno;
+    	} 
+    	else {
+        	printf("Read Clear Color Data: %d ", color_data);
+    	}
+   	close(fd);
+'''
