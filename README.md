@@ -173,25 +173,29 @@ integration time = (256 - atime ) *2.4, short time get data quick, long time mor
 		make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 ```
 Then do the same.
+
 2. Build a .ko file using cmd
 ```bash
 	make
 ```
-3.Install a driver
+3. Install a driver
 ```bash
 	sudo insmod TCS34725_Driver_ioctrl.ko
 ```
+
 In that case TCS34725_Driver_ioctrl are set in Makefile.
+
 4. You can check a notice in kernel log file
 ```bash
 	dmesg
 ```
 If running, the log file send a data get 1 time in sensor.
+
 If no data is sending, check the I2C recognize a sensor before.
 ```bash
 	i2cdetect -y 1
 ```
-5 If you want to uninstall driver run this cmd
+5. If you want to uninstall driver run this cmd
 ```bash
 	sudo rmmod TCS34725_Driver_ioctrl.ko
 ```
