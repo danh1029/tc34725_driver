@@ -180,10 +180,10 @@ Then do the same.
 ```
 3. Install a driver
 ```bash
-	sudo insmod TCS34725_Driver_ioctrl.ko
+	sudo insmod TCS34725_Driver.ko
 ```
 
-In that case TCS34725_Driver_ioctrl are set in Makefile.
+In that case TCS34725_Driver are set in Makefile.
 
 4. You can check a notice in kernel log file
 ```bash
@@ -197,7 +197,7 @@ If no data is sending, check the I2C recognize a sensor before.
 ```
 5. If you want to uninstall driver run this cmd
 ```bash
-	sudo rmmod TCS34725_Driver_ioctrl.ko
+	sudo rmmod TCS34725_Driver.ko
 ```
 6. Then remove all file compile
 ```bash
